@@ -84,28 +84,21 @@ POST /addlisting
 #### Example input
 The `data` input should have three properties that store certain properties about the rental home.
 
+##### Parameters
 | Name | Type | Description |
 | --- | --- | --- |
-|  title | string | The name of the listing |
-| space  | object | Has three properties of its own:
-occupancy (`string`) tells the renter what kind of rental the property is:
-  'entire' = entire place
-  'private' = private room
-  'shared' = shared room
-type (`string`) tells the renter what kind of property is being listed:
- 'house'
- 'apartment'
- 'villa'
- 'condo'
- 'squat'
- 'tech palace'
-bedCount (`number`) is the number of beds in the property
-|
-| rate | object | Has two properties of its own relating to the rental price of the property: price (`number`) is the rate of the rental timeframe (`string`) is how often the rate is applied:
- 'nightly'
- 'weekly'
- 'monthly'
-|
+|  `title` | `string` | The name of the listing |
+| `space`  | `object` | Has three [subparameters](#subparameters) of its own: *occupancy* (`string`), *type* (`string`), *bedCount* (`number`) |
+| `rate` | `object` | Has two [subparameters](#subparameters) of its own: *price* (`number`) and *timeframe* (`string`) |
+
+###### Subparameters
+| Name | Property of Parameter: | Type | Description |
+| --- | --- | --- | --- |
+| `occupancy` | `space` | `string` | Type of rental: 'entire' = entire place, 'private' = private room, or 'shared' = shared room |
+| `type` | `space` | `string` | Type of property: 'house', 'apartment', 'villa', 'condo', 'squat', or 'tech palace' |
+| `bedCount` | `space` | `number` | Number of beds in the rental |
+| `price` | `rate` | `number` | Rental rate of the property |
+| `timeframe` | `rate` | `string` | How often the rental rate is applied: 'nightly', 'weekly', or 'monthly' |
 
 ```
 {
