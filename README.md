@@ -88,25 +88,23 @@ The `data` input should have three properties that store certain properties abou
 | --- | --- | --- |
 |  title | string | The name of the listing |
 | space  | object | Has three properties of its own:
-* occupancy (`string`) tells the renter what kind of rental the property is:
-  * 'entire' = entire place
-  * 'private' = private room
-  * 'shared' = shared room
-* type (`string`) tells the renter what kind of property is being listed:
-  * 'house'
-  * 'apartment'
-  * 'villa'
-  * 'condo'
-  * 'squat'
-  * 'tech palace'
-* bedCount (`number`) is the number of beds in the property
+occupancy (`string`) tells the renter what kind of rental the property is:
+  'entire' = entire place
+  'private' = private room
+  'shared' = shared room
+type (`string`) tells the renter what kind of property is being listed:
+ 'house'
+ 'apartment'
+ 'villa'
+ 'condo'
+ 'squat'
+ 'tech palace'
+bedCount (`number`) is the number of beds in the property
 |
-| rate | object | Has two properties of its own relating to the rental price of the property:
-* price (`number`) is the rate of the rental
-* timeframe (`string`) is how often the rate is applied:
-  * 'nightly'
-  * 'weekly'
-  * 'monthly'
+| rate | object | Has two properties of its own relating to the rental price of the property: price (`number`) is the rate of the rental timeframe (`string`) is how often the rate is applied:
+ 'nightly'
+ 'weekly'
+ 'monthly'
 |
 
 ```
