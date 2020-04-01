@@ -169,19 +169,8 @@ Omitted fields will keep their original values.
 }
 
 #### Response
-The response `records` will return the newly updated document as a JSON object.
 
 `Status: 200 OK`
-```
-{"space":{"occupancy":"entire","type":"house","bedCount":3},
-"rate":{"price":3000,"timeframe":"weekly"},
-"review":{"stars":56548,"reviewers":8872},
-"images":["AWS(url.1)","AWS(url.2)","...etc"],
-"_id":19,
-"title":"The USB panel is down, reboot the auxiliary sensor so we can hack the IB card!",
-"description":"HTTP",
-"__v":0}
-```
 
 ### Delete a listing
 ```
