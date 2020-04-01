@@ -14,10 +14,10 @@
 2. [Requirements](#requirements)
 3. [Development](#development)
 4. [API Routes](#API)
-  1. [Read Listings](#get)
-  2. [Create Listing](#create)
-  3. [Update Listing](#update)
-  4. [Delete Listing](#delete)
+  - [Create Listing](#create)
+  - [Read Listings](#get)
+  - [Update Listing](#update)
+  - [Delete Listing](#delete)
 
 ## Usage
 
@@ -54,26 +54,6 @@ You can run the server in development mode by running:
 
 
 ## API Routes
-### Get the initial set of listings
-
-```
-GET /recommendations
-```
-
-#### Response
-The response `records` will be a JSON object
-
-`Status: 200 OK`
-```
-{"space":{"occupancy":"entire","type":"house","bedCount":89815},
-"rate":{"price":15823,"timeframe":"nightly"},
-"review":{"stars":56548,"reviewers":8872},
-"images":["AWS(url.1)","AWS(url.2)","...etc"],
-"_id":19,
-"title":"The USB panel is down, reboot the auxiliary sensor so we can hack the IB card!",
-"description":"HTTP",
-"__v":0}
-```
 
 ### Create a new listing
 
@@ -119,6 +99,28 @@ The request body `data` includes three properties that encode details of the ren
   }
 }
 ```
+
+### Read listings
+
+```
+GET /recommendations
+```
+
+#### Response
+The response `records` will be a JSON object
+
+`Status: 200 OK`
+```
+{"space":{"occupancy":"entire","type":"house","bedCount":89815},
+"rate":{"price":15823,"timeframe":"nightly"},
+"review":{"stars":56548,"reviewers":8872},
+"images":["AWS(url.1)","AWS(url.2)","...etc"],
+"_id":19,
+"title":"The USB panel is down, reboot the auxiliary sensor so we can hack the IB card!",
+"description":"HTTP",
+"__v":0}
+```
+
 
 ### Update a listing
 ```
