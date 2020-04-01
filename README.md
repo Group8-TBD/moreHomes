@@ -11,13 +11,13 @@
 ## Table of Contents
 
 1. [Usage](#Usage)
-1. [Requirements](#requirements)
-1. [Development](#development)
-1. [API Routes](#API)
+2. [Requirements](#requirements)
+3. [Development](#development)
+4. [API Routes](#API)
   1. [Read Listings](#get)
-  1. [Create Listing](#create)
-  1. [Update Listing](#update)
-  1. [Delete Listing](#delete)
+  2. [Create Listing](#create)
+  3. [Update Listing](#update)
+  4. [Delete Listing](#delete)
 
 ## Usage
 
