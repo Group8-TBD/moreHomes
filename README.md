@@ -73,25 +73,24 @@ The response `records` will be a JSON object
 ### Create a new listing
 
 ```
-POST /addlisting
+POST /recommendations
 ```
 
 #### Parameters
+The request body `data` includes three properties that encode details of the rental listing.
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | data | object | **Required** The data of the new database record. Should include the title, space, and rate. |
 
-#### Example input
-The `data` input should have three properties that store certain properties about the rental home.
 
-##### Parameters
+#### Data properties
 | Name | Type | Description |
 | --- | --- | --- |
 |  `title` | `string` | The name of the listing |
-| `space`  | `object` | Has three [subparameters](#subparameters) of its own: *occupancy* (`string`), *type* (`string`), *bedCount* (`number`) |
-| `rate` | `object` | Has two [subparameters](#subparameters) of its own: *price* (`number`) and *timeframe* (`string`) |
+| `space`  | `object` | Has three [properties of its own](#subproperties): *occupancy* (`string`), *type* (`string`), *bedCount* (`number`) |
+| `rate` | `object` | Has two [properties of its own](#subproperties): *price* (`number`) and *timeframe* (`string`) |
 
-###### Subparameters
+###### Subproperties
 | Name | Property of Parameter: | Type | Description |
 | --- | --- | --- | --- |
 | `occupancy` | `space` | `string` | Type of rental: 'entire' = entire place, 'private' = private room, or 'shared' = shared room |
@@ -100,6 +99,7 @@ The `data` input should have three properties that store certain properties abou
 | `price` | `rate` | `number` | Rental rate of the property |
 | `timeframe` | `rate` | `string` | How often the rental rate is applied: 'nightly', 'weekly', or 'monthly' |
 
+#### Example input
 ```
 {
   title: "My Home",
@@ -114,3 +114,84 @@ The `data` input should have three properties that store certain properties abou
   }
 }
 ```
+
+### Update a listing
+```
+PATCH /recommendations
+```
+
+Updates the listing with the `id` in the request body.
+
+#### Parameters
+The request body `data` will include the field in the document to be updated. Only the fields included will be updated, and will replace the existing document's corresponding field with the new value.
+
+Omitted fields will keep their original values.
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `id` | `number` | **Required** The id of the document to be updated |
+| `title` | `string` | The title of the listing |
+| `type` | `space` | `string` | Type of property: 'house', 'apartment', 'villa', 'condo', 'squat', or 'tech palace' |
+| `rate` | `object` | Has two [properties of its own](#subproperties): *price* (`number`) and *timeframe* (`string`) |
+| `review` | `object` | Has two [properties of its own](#subproperties): *stars* (`number`) and *reviewers* (`number`) |
+| `description` | `string` | Description of the property |
+
+##### Subproperties
+
+| Name | Property of Parameter: | Type | Description |
+| --- | --- | --- | --- |
+| `occupancy` | `space` | `string` | Type of rental: 'entire' = entire place, 'private' = private room, or 'shared' = shared room |
+| `type` | `space` | `string` | Type of property: 'house', 'apartment', 'villa', 'condo', 'squat', or 'tech palace' |
+| `bedCount` | `space` | `number` | Number of beds in the rental |
+| `price` | `rate` | `number` | Rental rate of the property |
+| `timeframe` | `rate` | `string` | How often the rental rate is applied: 'nightly', 'weekly', or 'monthly' |
+| `stars` | `review` | `number` | Average review rating for the property (range of 0-5) |
+| `reviewers` | `review` | `number` | Number of reviews for the property |
+
+#### Example input
+{
+  id: 1
+  title: "Updated Home",
+  space: {
+    bedCount: 3
+  },
+  rate: {
+    price: 3000,
+    rate: "weekly"
+  }
+}
+
+#### Response
+The response `records` will return the newly updated document as a JSON object.
+
+`Status: 200 OK`
+```
+{"space":{"occupancy":"entire","type":"house","bedCount":3},
+"rate":{"price":3000,"timeframe":"weekly"},
+"review":{"stars":56548,"reviewers":8872},
+"images":["AWS(url.1)","AWS(url.2)","...etc"],
+"_id":19,
+"title":"The USB panel is down, reboot the auxiliary sensor so we can hack the IB card!",
+"description":"HTTP",
+"__v":0}
+```
+
+### Delete a listing
+```
+DELETE /recommendations
+```
+
+Deletes the record with the `id` in the request body.
+
+#### Parameters
+| Name | Type | Description |
+| --- | --- | --- |
+| `id` | `number` | **Required** The id of the listing to be deleted |
+
+#### Example input
+{
+  id: 1
+}
+
+#### Response
+`Status: 200 OK`
