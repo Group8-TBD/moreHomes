@@ -13,6 +13,11 @@
 1. [Usage](#Usage)
 1. [Requirements](#requirements)
 1. [Development](#development)
+1. [API Routes](#API)
+  1. [Read Listings](#get)
+  1. [Create Listing](#create)
+  1. [Update Listing](#update)
+  1. [Delete Listing](#delete)
 
 ## Usage
 
@@ -20,13 +25,13 @@
 
 From within the root directory:
 
-```sh
-npm install
+```
+$ npm install
 ```
 
-After installing dependencies, execute 'npm run seed' from the command line. This will provide a randomized set of homes to load in the component in your mongoDB database under the db called 'recommendations'.
+After installing dependencies, execute `npm run seed` from the command line. This will provide a randomized set of homes to load in the component in your mongoDB database under the db called `recommendations`.
 
-After that, run 'npm start' to start the server. Point your client browser to 'localhost:3009' to access!
+After that, run `npm start` to start the server. Point your client browser to `localhost:3009` to access!
 
 Enjoy.
 
@@ -48,7 +53,7 @@ You can run the server in development mode by running:
 -npm run react-dev (this runs webpack and related confirguration, watching the files to update in real-time)
 
 
-## API Requests
+## API Routes
 ### Get the initial set of listings
 
 ```
@@ -189,9 +194,11 @@ Deletes the record with the `id` in the request body.
 | `id` | `number` | **Required** The id of the listing to be deleted |
 
 #### Example input
+```
 {
   id: 1
 }
+```
 
 #### Response
 `Status: 200 OK`
