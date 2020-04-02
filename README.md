@@ -65,24 +65,17 @@ POST /recommendations
 The request body `data` includes three properties that encode details of the rental listing.
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| data | object | **Required** The data of the new database record. Should include the title, space, and rate. |
-
+| data | object | **Required** The data to be encoded the new database record. |
 
 #### Data properties
 | Name | Type | Description |
 | --- | --- | --- |
 |  `title` | `string` | The name of the listing |
-| `space`  | `object` | Has three [properties of its own](#subproperties): *occupancy* (`string`), *type* (`string`), *bedCount* (`number`) |
-| `rate` | `object` | Has two [properties of its own](#subproperties): *price* (`number`) and *timeframe* (`string`) |
-
-###### Subproperties
-| Name | Property of Parameter: | Type | Description |
-| --- | --- | --- | --- |
-| `occupancy` | `space` | `string` | Type of rental: 'entire' = entire place, 'private' = private room, or 'shared' = shared room |
-| `type` | `space` | `string` | Type of property: 'house', 'apartment', 'villa', 'condo', 'squat', or 'tech palace' |
-| `bedCount` | `space` | `number` | Number of beds in the rental |
-| `price` | `rate` | `number` | Rental rate of the property |
-| `timeframe` | `rate` | `string` | How often the rental rate is applied: 'nightly', 'weekly', or 'monthly' |
+| `occupancy` | `string` | Type of rental: 'entire' = entire place, 'private' = private room, or 'shared' = shared room |
+| `type` | `string` | Type of property: 'house', 'apartment', 'villa', 'condo', 'squat', or 'tech palace' |
+| `bedCount` | `number` | Number of beds in the rental |
+| `price` | `number` | Rental rate of the property |
+| `timeframe` | `string` | How often the rental rate is applied: 'nightly', 'weekly', or 'monthly' |
 
 #### Example input
 ```
@@ -99,6 +92,8 @@ The request body `data` includes three properties that encode details of the ren
   }
 }
 ```
+#### Response
+`Status: 201 OK`
 
 ### Read listings
 
@@ -124,10 +119,10 @@ The response `records` will be a JSON object
 
 ### Update a listing
 ```
-PATCH /recommendations
+PATCH /recommendations/listing/:id
 ```
 
-Updates the listing with the `id` in the request body.
+Updates the listing with the `id` in the URL.
 
 #### Parameters
 The request body `data` will include the field in the document to be updated. Only the fields included will be updated, and will replace the existing document's corresponding field with the new value.
@@ -136,26 +131,18 @@ Omitted fields will keep their original values.
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `id` | `number` | **Required** The id of the document to be updated |
-| `title` | `string` | The title of the listing |
-| `type` | `space` | `string` | Type of property: 'house', 'apartment', 'villa', 'condo', 'squat', or 'tech palace' |
-| `rate` | `object` | Has two [properties of its own](#subproperties): *price* (`number`) and *timeframe* (`string`) |
-| `review` | `object` | Has two [properties of its own](#subproperties): *stars* (`number`) and *reviewers* (`number`) |
+| `occupancy` | `string` | Type of rental: 'entire' = entire place, 'private' = private room, or 'shared' = shared room |
+| `type` | `string` | Type of property: 'house', 'apartment', 'villa', 'condo', 'squat', or 'tech palace' |
+| `bedCount` | `number` | Number of beds in the rental |
+| `price` | `number` | Rental rate of the property |
+| `timeframe` | `string` | How often the rental rate is applied: 'nightly', 'weekly', or 'monthly' |
+| `stars` | `number` | Average review rating for the property (range of 0-5) |
+| `reviewers` | `number` | Number of reviews for the property |
 | `description` | `string` | Description of the property |
 
-##### Subproperties
-
-| Name | Property of Parameter: | Type | Description |
-| --- | --- | --- | --- |
-| `occupancy` | `space` | `string` | Type of rental: 'entire' = entire place, 'private' = private room, or 'shared' = shared room |
-| `type` | `space` | `string` | Type of property: 'house', 'apartment', 'villa', 'condo', 'squat', or 'tech palace' |
-| `bedCount` | `space` | `number` | Number of beds in the rental |
-| `price` | `rate` | `number` | Rental rate of the property |
-| `timeframe` | `rate` | `string` | How often the rental rate is applied: 'nightly', 'weekly', or 'monthly' |
-| `stars` | `review` | `number` | Average review rating for the property (range of 0-5) |
-| `reviewers` | `review` | `number` | Number of reviews for the property |
 
 #### Example input
+```
 {
   id: 1
   title: "Updated Home",
@@ -167,6 +154,7 @@ Omitted fields will keep their original values.
     rate: "weekly"
   }
 }
+```
 
 #### Response
 
@@ -174,15 +162,10 @@ Omitted fields will keep their original values.
 
 ### Delete a listing
 ```
-DELETE /recommendations
+DELETE /recommendations/listing/:id
 ```
 
-Deletes the record with the `id` in the request body.
-
-#### Parameters
-| Name | Type | Description |
-| --- | --- | --- |
-| `id` | `number` | **Required** The id of the listing to be deleted |
+Deletes the record with the `id` in the endpoint.
 
 #### Example input
 ```

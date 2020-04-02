@@ -27,3 +27,5 @@ spec
 build/
 dist/
 
+public/bundle.js
+
