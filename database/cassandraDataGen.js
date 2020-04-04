@@ -3,7 +3,7 @@ const faker = require('faker');
 const path = require('path');
 const cliProgress = require('cli-progress');
 const csvWriter = createCsvWriter({
-  path: path.join(__dirname, 'cassData.csv'),
+  path: path.join(__dirname, 'generated_data', 'cassData.csv'),
   header: [
     { id: 'zip', title: 'ZIP'},
     { id: 'url', title: 'URL' },

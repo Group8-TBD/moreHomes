@@ -4,9 +4,8 @@ const path = require('path');
 const cliProgress = require('cli-progress');
 
 const listingsWriter = createCsvWriter({
-  path: path.join(__dirname, 'postgresListings.csv'),
+  path: path.join(__dirname, 'generated_data', 'postgresListings.csv'),
   header: [
-    { id: 'id', title: 'ID' },
     { id: 'url', title: 'URL' },
     { id: 'occ', title: 'OCCUPANCY' },
     { id: 'type', title: 'TYPE' },
@@ -21,9 +20,8 @@ const listingsWriter = createCsvWriter({
 });
 
 const imagesWriter = createCsvWriter({
-  path: path.join(__dirname, 'postgresImages.csv'),
+  path: path.join(__dirname, 'generated_data', 'postgresImages.csv'),
   header: [
-    { id: 'id', title: 'ID' },
     { id: 'url', title: 'URL' },
     { id: 'descr', title: 'DESCRIPTION' },
     { id: 'list', title: 'LISTING' },
@@ -99,7 +97,7 @@ const generateData = () => {
         id: j,
         url: randomImage(),
         descr: faker.hacker.phrase(),
-        list: i + 1
+        list: ((cycle - 1) * 10000) + i + 1
       }
 
       data.images.push(image);

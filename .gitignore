@@ -28,6 +28,4 @@ build/
 dist/
 
 public/bundle.js
-database/cassData.csv
-database/postgresListings.csv
-database/postgresImages.csv
+database/generated_data/
