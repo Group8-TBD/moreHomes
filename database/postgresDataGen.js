@@ -6,6 +6,7 @@ const cliProgress = require('cli-progress');
 const listingsWriter = createCsvWriter({
   path: path.join(__dirname, 'postgresListings.csv'),
   header: [
+    { id: 'id', title: 'ID' },
     { id: 'url', title: 'URL' },
     { id: 'occ', title: 'OCCUPANCY' },
     { id: 'type', title: 'TYPE' },
@@ -22,16 +23,14 @@ const listingsWriter = createCsvWriter({
 const imagesWriter = createCsvWriter({
   path: path.join(__dirname, 'postgresImages.csv'),
   header: [
+    { id: 'id', title: 'ID' },
     { id: 'url', title: 'URL' },
     { id: 'descr', title: 'DESCRIPTION' },
     { id: 'list', title: 'LISTING' },
   ]
 });
 
-const multibar = new cliProgress.MultiBar({
-  clearOnComplete: false,
-  hideCursor: true
-}, cliProgress.Presets.shades_classic);
+const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
 
 const randomImage = () => {
 
@@ -72,13 +71,16 @@ const randomInt = (max, min) => {
 };
 
 // data generation function. Returns an array of 10000 randomized records
-const generateListing = () => {
-  const listingRecords = [];
+const generateData = () => {
+  const data = {
+    listings: [],
+    images: []
+  };
 
   for (let i = 0; i < 10000; i += 1) {
-    const urlId = ((listingCycle * 10000) + i).toString().padStart(8, '0');
+    const listingId = ((cycle * 10000) + i).toString().padStart(10, '0');
     let listing = {
-      url: `http://mtolympus.com/listings/${urlId}`,
+      url: `http://mtolympus.com/listings/${listingId}`,
       occ: allOccup[randomInt(allOccup)],
       type: allTypes[randomInt(allTypes)],
       beds: randomInt(9, 1),
@@ -90,77 +92,49 @@ const generateListing = () => {
       zip: faker.address.zipCode(),
     };
 
-    listingRecords.push(listing);
-  };
+    data.listings.push(listing);
 
-  return listingRecords;
-};
-
-const generateImages = () => {
-  const imageRecords = [];
-
-  for (var i = 0; i < 10000; i += 1) {
-    for (var j = 0; j < randomInt(10, 5); j += 1) {
+    for (let j = 0; j < randomInt(10, 5); j += 1) {
       let image = {
+        id: j,
         url: randomImage(),
         descr: faker.hacker.phrase(),
-        list: i
-      };
+        list: i + 1
+      }
 
-      imageRecords.push(image);
+      data.images.push(image);
     }
+
   };
 
-  return imageRecords;
+  return data;
 };
 
 // counter for data generation loops
-let listingCycle = 0;
-let imageCycle = 0;
+let cycle = 0;
 
-const genManyListings = () => {
-  if (listingCycle < 1000) {
-    listingCycle += 1;
+const generateManyRecords = () => {
+  if (cycle < 1000) {
+    cycle += 1;
 
-    let listingData = generateListing();
+    let data = generateData();
 
-    listingsWriter.writeRecords(listingData)
+    listingsWriter.writeRecords(data.listings)
+      .then(() => {
+        imagesWriter.writeRecords(data.images)
+      })
       .then(() => {
         bar1.increment();
-        genManyListings();
+        generateManyRecords();
       })
       .catch((error) => console.log('error'));
   } else {
     bar1.stop();
-    console.timeEnd('Time taken to write 10M listing records: ');
+    console.timeEnd('Time taken to generate PostgreSQL data: ');
     console.log('Listing records written');
   }
 };
 
-const genManyImages = () => {
-  if (imageCycle < 1000) {
-    imageCycle += 1;
-
-    let imageData = generateImages();
-
-    imagesWriter.writeRecords(imageData)
-      .then(() => {
-        bar2.increment();
-        genManyImages();
-      })
-      .catch((error) => console.log('error'));
-  } else {
-    bar2.stop();
-    console.timeEnd('Time taken to write 50-100M image records: ');
-    console.log('Image records written');
-  }
-};
-
-// initialize progress bar for data generation tracking
-const bar1 = multibar.create(1000, 0);
-const bar2 = multibar.create(1000, 0)
-console.time('Time taken to write 10M listing records: ');
-genManyListings();
-
-console.time('Time taken to write 50-100M image records: ');
-genManyImages();
+bar1.start(1000, 0);
+console.time('Time taken to generate PostgreSQL data: ');
+generateManyRecords();

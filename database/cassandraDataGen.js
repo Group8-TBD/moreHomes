@@ -5,17 +5,17 @@ const cliProgress = require('cli-progress');
 const csvWriter = createCsvWriter({
   path: path.join(__dirname, 'cassData.csv'),
   header: [
+    { id: 'zip', title: 'ZIP'},
     { id: 'url', title: 'URL' },
-    { id: 'occ', title: 'OCCUPANCY' },
-    { id: 'type', title: 'TYPE' },
+    { id: 'rtg', title: 'AVG_RTG' },
     { id: 'beds', title: 'BED_COUNT' },
+    { id: 'descr', title: 'DESCRIPTION' },
+    { id: 'img', title: 'IMG' },
+    { id: 'reviews', title: 'NUM_REVIEWS' },
+    { id: 'occ', title: 'OCCUPANCY' },
     { id: 'price', title: 'PRICE' },
     { id: 'time', title: 'TIMEFRAME' },
-    { id: 'rtg', title: 'AVG_RTG' },
-    { id: 'reviews', title: 'NUM_REVIEWS' },
-    { id: 'descr', title: 'DESCRIPTION' },
-    { id: 'zip', title: 'ZIP'},
-    { id: 'imgs', title: 'IMG_URLS' },
+    { id: 'type', title: 'TYPE' },
   ]
 });
 
@@ -64,22 +64,34 @@ const generateData = () => {
   const allRecords = [];
 
   for (let i = 0; i < 10000; i += 1) {
+    const zip = faker.address.zipCode();
     const urlId = ((cycle * 10000) + i).toString().padStart(8, '0');
-    let record = {
-      url: `http://mtolympus.com/listings/${urlId}`,
-      occ: allOccup[randomInt(allOccup)],
-      type: allTypes[randomInt(allTypes)],
-      beds: randomInt(9, 1),
-      price: randomInt(10000, 90),
-      time: allTimes[randomInt(allTimes)],
-      rtg: faker.finance.amount(3, 5, 2),
-      reviews: randomInt(1000),
-      descr: faker.hacker.phrase(),
-      zip: faker.address.zipCode(),
-      imgs: [randomImage(), randomImage(), randomImage(), randomImage(), randomImage()]
-    };
+    const rtg = faker.finance.amount(3, 5, 2);
+    const beds = randomInt(9, 1);
+    const descr = faker.hacker.phrase();
+    const reviews = randomInt(1000);
+    const occ = allOccup[randomInt(allOccup)];
+    const price = randomInt(10000, 90);
+    const time = allTimes[randomInt(allTimes)];
+    const type = allTypes[randomInt(allTypes)];
 
-    allRecords.push(record);
+    for (let j = 0; j < 5; j += 1) {
+      let record = {
+        zip,
+        url: `http://mtolympus.com/listings/${urlId}`,
+        rtg,
+        beds,
+        descr,
+        img: randomImage(),
+        reviews,
+        occ,
+        price,
+        time,
+        type,
+      };
+
+      allRecords.push(record);
+    }
   };
 
   return allRecords;
@@ -88,16 +100,16 @@ const generateData = () => {
 // counter for data generation loop
 let cycle = 0;
 
-const genTenMillion = () => {
+const generateManyRecords = () => {
   if (cycle < 1000) {
     let data = generateData();
 
     csvWriter.writeRecords(data)
-      .then(() => {
-        cycle += 1;
-        bar1.increment();
-        genTenMillion();
-      })
+    .then(() => {
+      cycle += 1;
+      bar1.increment();
+      generateManyRecords();
+    })
       .catch((error) => console.log('error'));
   } else {
     bar1.stop();
@@ -109,4 +121,4 @@ const genTenMillion = () => {
 // initialize progress bar for data generation tracking
 bar1.start(1000, 0)
 console.time('Time taken to generate Cassandra data: ');
-genTenMillion();
+generateManyRecords();
