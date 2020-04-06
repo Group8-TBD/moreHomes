@@ -6,7 +6,7 @@ const cliProgress = require('cli-progress');
 const listingsWriter = createCsvWriter({
   path: path.join(__dirname, 'generated_data', 'postgresListings.csv'),
   header: [
-    { id: 'url', title: 'URL' },
+    { id: 'urlId', title: 'URL_ID' },
     { id: 'occ', title: 'OCCUPANCY' },
     { id: 'type', title: 'TYPE' },
     { id: 'beds', title: 'BED_COUNT' },
@@ -22,7 +22,7 @@ const listingsWriter = createCsvWriter({
 const imagesWriter = createCsvWriter({
   path: path.join(__dirname, 'generated_data', 'postgresImages.csv'),
   header: [
-    { id: 'url', title: 'URL' },
+    { id: 'urlId', title: 'URL_ID' },
     { id: 'descr', title: 'DESCRIPTION' },
     { id: 'list', title: 'LISTING' },
   ]
@@ -36,10 +36,8 @@ const randomImage = () => {
   let padToThree = number => number <= 999 ? `00${number}`.slice(-3) : number; //fancy es6 zero padding function
 
   const imageRandom = Math.floor(Math.random() * 188); //this integer is the number of items in an AWS bucket
-  const url = 'https://olympuscomponent.s3-us-west-1.amazonaws.com/';
-  const image = url + padToThree(imageRandom) + '.jpg';
 
-  return image;
+  return padToThree(imageRandom);
 }
 
 // all possibilities for 'occupancy', 'types', and 'timeframe' fields
@@ -76,9 +74,8 @@ const generateData = () => {
   };
 
   for (let i = 0; i < 10000; i += 1) {
-    const listingId = ((cycle * 10000) + i).toString().padStart(10, '0');
     let listing = {
-      url: `http://mtolympus.com/listings/${listingId}`,
+      urlId: faker.random.uuid(),
       occ: allOccup[randomInt(allOccup)],
       type: allTypes[randomInt(allTypes)],
       beds: randomInt(9, 1),
@@ -94,8 +91,7 @@ const generateData = () => {
 
     for (let j = 0; j < randomInt(10, 5); j += 1) {
       let image = {
-        id: j,
-        url: randomImage(),
+        urlId: randomImage(),
         descr: faker.hacker.phrase(),
         list: ((cycle - 1) * 10000) + i + 1
       }
@@ -129,7 +125,7 @@ const generateManyRecords = () => {
   } else {
     bar1.stop();
     console.timeEnd('Time taken to generate PostgreSQL data: ');
-    console.log('Listing records written');
+    console.log('Postgress data written. Go wild!');
   }
 };
 

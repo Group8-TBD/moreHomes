@@ -6,11 +6,11 @@ const csvWriter = createCsvWriter({
   path: path.join(__dirname, 'generated_data', 'cassData.csv'),
   header: [
     { id: 'zip', title: 'ZIP'},
-    { id: 'url', title: 'URL' },
+    { id: 'urlId', title: 'URL_ID' },
+    { id: 'imgId', title: 'IMG_ID' },
     { id: 'rtg', title: 'AVG_RTG' },
     { id: 'beds', title: 'BED_COUNT' },
     { id: 'descr', title: 'DESCRIPTION' },
-    { id: 'img', title: 'IMG' },
     { id: 'reviews', title: 'NUM_REVIEWS' },
     { id: 'occ', title: 'OCCUPANCY' },
     { id: 'price', title: 'PRICE' },
@@ -27,10 +27,8 @@ const randomImage = () => {
   let padToThree = number => number <= 999 ? `00${number}`.slice(-3) : number; //fancy es6 zero padding function
 
   const imageRandom = Math.floor(Math.random() * 188); //this integer is the number of items in an AWS bucket
-  const url = 'https://olympuscomponent.s3-us-west-1.amazonaws.com/';
-  const image = url + padToThree(imageRandom) + '.jpg';
 
-  return image;
+  return padToThree(imageRandom);
 }
 
 // all possibilities for 'occupancy', 'types', and 'timeframe' fields
@@ -65,7 +63,7 @@ const generateData = () => {
 
   for (let i = 0; i < 10000; i += 1) {
     const zip = faker.address.zipCode();
-    const urlId = ((cycle * 10000) + i).toString().padStart(8, '0');
+    const urlId = faker.random.uuid();
     const rtg = faker.finance.amount(3, 5, 2);
     const beds = randomInt(9, 1);
     const descr = faker.hacker.phrase();
@@ -78,11 +76,11 @@ const generateData = () => {
     for (let j = 0; j < 5; j += 1) {
       let record = {
         zip,
-        url: `http://mtolympus.com/listings/${urlId}`,
+        urlId,
+        imgId: randomImage(),
         rtg,
         beds,
         descr,
-        img: randomImage(),
         reviews,
         occ,
         price,
