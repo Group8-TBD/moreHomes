@@ -17,13 +17,12 @@
     "build": "webpack -p",
     "start-dev": "nodemon server/index.js",
     "react-dev": "webpack -d --watch",
-    "gen-cass": "node database/cassandraDataGen.js",
-    "gen-post": "node database/postgresDataGen.js"
+    "gen-cass": "node database/generator-scripts/cassandraDataGen.js",
+    "gen-post": "node database/generator-scripts/postgresDataGen.js"
   },
   "dependencies": {
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
-    "cassandra-driver": "^4.5.0",
     "circular-std": "^1.0.3",
     "cli-progress": "^3.6.1",
     "csv-writer": "^1.6.0",

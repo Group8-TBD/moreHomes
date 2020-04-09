@@ -1,22 +1,17 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-var bodyParser = require('body-parser');
+const Controller = require('./controllers.js');
+
+const bodyParser = require('body-parser');
+
 const port = 3009;
-const { getOneEntry } = require('../database/calls');
 
-app.use(express.static(__dirname + '/../public'));
+app.use(express.static(path.join(__dirname, '/../public')));
 
-app.get('/recommendations', function(req, res) {
-
-  //currently fetches records _ids 1-8
-  getSet((err, data) => {
-    if (err) {
-      console.log(err);
-    }
-    res.send(data);
-  });
-
-});
+app.get('/recommendations?zip', Controller.getRecs);
+app.post('/recommendations', Controller.addListing);
+app.patch('/recommendations/listing/:id', Controller.updateListing);
+app.delete('/recommendations/listing/:id', Controller.deleteListing);
 
 app.listen(port, () => console.log(`matrix consolidating on port ${port}!`))

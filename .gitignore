@@ -28,4 +28,4 @@ build/
 dist/
 
 public/bundle.js
-database/generated_data/
+database/generated-data/
