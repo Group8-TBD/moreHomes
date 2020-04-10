@@ -1,17 +1,36 @@
 const db = require('../database.js');
 
-const getRecs = (zip, callback) => {
-  const queryStr = `SELECT * from listings, images WHERE images.listing=listings.id AND listings.zip=$1`
-  db.query(queryStr, zip, callback);
+const getRecs = async (zip) => {
+  try {
+    const queryStr = `SELECT id, occupancy, type, bed_count, price, timeframe, avg_rtg, num_reviews, description from listings where zip=$1 LIMIT 8`;
+    let result = await db.query(queryStr, zip);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getImgs = async (listing) => {
+  try {
+    const queryStr = `SELECT image_url_id FROM images WHERE listing=$1`;
+    let result = await db.query(queryStr, listing);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const addListing = (params, callback) => {
-  const queryStr = `INSERT INTO listings (listing_url_id, occupancy, type, bed_count, price, timeframe, avg_rtg, num_reviews, description, zip) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+  const queryStr = `INSERT INTO listings (listing_url_id, occupancy, type, bed_count, price, timeframe, avg_rtg, num_reviews, description, zip) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`;
   db.query(queryStr, params, callback);
 };
 
 const updateListing = (id, fields, callback) => {
-  const queryStr = `UPDATE listings SET ? WHERE id=${id};`;
+  let updateStr = ``;
+  for (let i = 0; i < fields.length; i += 2) {
+    updateStr += `$${i}=$${i + 1}`
+  }
+  const queryStr = `UPDATE listings SET ${updateStr} WHERE id=${id};`;
   db.query(queryStr, fields, callback);
 };
 
@@ -23,6 +42,7 @@ const deleteListing = (id, callback) => {
 
 module.exports = {
   getRecs,
+  getImgs,
   addListing,
   updateListing,
   deleteListing

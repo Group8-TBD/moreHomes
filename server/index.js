@@ -6,7 +6,7 @@ const Controller = require('./controllers.js');
 
 const bodyParser = require('body-parser');
 
-const port = 3009;
+const port = 3000;
 
 app.use(express.static(path.join(__dirname, '/../public')));
 
