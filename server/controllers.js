@@ -2,8 +2,8 @@ const Models = require('../database/models/models.js');
 const faker = require('faker');
 
 const getRecs = (req, res) => {
-  const zipCode = req.query;
-  Models.getRecs(zipCode, (err, allRecommendations) => {
+  const params = [req.params.zip];
+  Models.getRecs(params, (err, allRecommendations) => {
     if (err) {
       console.log('Error getting recommendations', err);
     } else {

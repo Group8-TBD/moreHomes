@@ -1,12 +1,12 @@
 const db = require('../database.js');
 
 const getRecs = (zip, callback) => {
-  const queryStr = 'SELECT * from listings, images WHERE images.listing=listings.id AND listings.id=?;'
+  const queryStr = `SELECT * from listings, images WHERE images.listing=listings.id AND listings.zip=$1`
   db.query(queryStr, zip, callback);
 };
 
 const addListing = (params, callback) => {
-  const queryStr = 'INSERT INTO listings (listing_url_id, occupancy, type, bed_count, price, timeframe, avg_rtg, num_reviews, description, zip) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);';
+  const queryStr = `INSERT INTO listings (listing_url_id, occupancy, type, bed_count, price, timeframe, avg_rtg, num_reviews, description, zip) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
   db.query(queryStr, params, callback);
 };
 
