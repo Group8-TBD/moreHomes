@@ -11,7 +11,7 @@ const getImgs = (listingId, callback) => {
 };
 
 const addListing = (params, callback) => {
-  const queryStr = `INSERT INTO listings (listing_url_id, occupancy, type, bed_count, price, timeframe, avg_rtg, num_reviews, description, zip) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`;
+  const queryStr = `INSERT INTO listings (listing_url_id, occupancy, type, bed_count, price, timeframe, description, zip) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`;
   db.query(queryStr, params, callback);
 };
 

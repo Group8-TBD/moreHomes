@@ -25,7 +25,18 @@ const addListing = (req, res) => {
   const uuid = faker.random.uuid();
   const listingData = req.body;
 
-  Models.addListing(listingData, (err) => {
+  const params = [
+    uuid,
+    listingData.occupancy,
+    listingData.type,
+    listingData.bedCount,
+    listingData.price,
+    listingData.timeframe,
+    listingData.description,
+    listingData.zip
+  ];
+
+  Models.addListing(params, (err) => {
     if (err) {
       console.log('Error adding listing', err);
     } else {

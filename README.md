@@ -70,50 +70,84 @@ The request body `data` includes three properties that encode details of the ren
 #### Data properties
 | Name | Type | Description |
 | --- | --- | --- |
-|  `title` | `string` | The name of the listing |
 | `occupancy` | `string` | Type of rental: 'entire' = entire place, 'private' = private room, or 'shared' = shared room |
 | `type` | `string` | Type of property: 'house', 'apartment', 'villa', 'condo', 'squat', or 'tech palace' |
 | `bedCount` | `number` | Number of beds in the rental |
 | `price` | `number` | Rental rate of the property |
 | `timeframe` | `string` | How often the rental rate is applied: 'nightly', 'weekly', or 'monthly' |
+| `description` | `string` | A short description of the listing |
+| `zip` | `string` | Zipcode of the property |
 
 #### Example input
 ```
 {
-  title: "My Home",
-  space: {
-    occupancy: "entire",
-    type: "tech palace",
-    bedCount: 200000
-  },
-  rate: {
-    price: 1000000,
-    rate: "nightly"
-  }
+  occupancy: 'entire',
+  type: 'villa',
+  bedCount: 8,
+  price: 1000,
+  timeframe: weekly,
+  description: 'new home',
+  zip: '94106'
 }
 ```
 #### Response
 `Status: 201 OK`
 
-### Read listings
+### Read listing data
 
 ```
-GET /recommendations
+GET /recommendations/:zip
 ```
 
 #### Response
-The response `records` will be a JSON object
+The response `listings` will be an array of objects.
 
 `Status: 200 OK`
 ```
-{"space":{"occupancy":"entire","type":"house","bedCount":89815},
-"rate":{"price":15823,"timeframe":"nightly"},
-"review":{"stars":56548,"reviewers":8872},
-"images":["AWS(url.1)","AWS(url.2)","...etc"],
-"_id":19,
-"title":"The USB panel is down, reboot the auxiliary sensor so we can hack the IB card!",
-"description":"HTTP",
-"__v":0}
+[
+  {
+    id: 102304,
+    occupancy: 'entire',
+    type: 'villa',
+    bed_count: 4,
+    price: 10000,
+    timeframe: 'nightly',
+    avg_rtg: 3.9,
+    num_reviews: 100,
+    description: 'listing1'
+  },
+  {
+    id: 20861,
+    occupancy: 'shared',
+    type: 'condo',
+    bed_count: 1,
+    price: 100,
+    timeframe: 'nightly',
+    avg_rtg: 4.0,
+    num_reviews: 45,
+    description: 'listing2'
+  }
+]
+```
+
+
+### Read listing images
+```
+GET /images/listing/:id
+```
+
+#### Response
+The response `images` will be an array of objects.
+
+`Status: 200 OK`
+```
+[
+  { image_url_id: '192' },
+  { image_url_id: '12' },
+  { image_url_id: '18' },
+  { image_url_id: '11' },
+  { image_url_id: '93' }
+]
 ```
 
 
@@ -145,14 +179,9 @@ Omitted fields will keep their original values.
 ```
 {
   id: 1
-  title: "Updated Home",
-  space: {
-    bedCount: 3
-  },
-  rate: {
-    price: 3000,
-    rate: "weekly"
-  }
+  description: 'updated home',
+  bedCount: 3,
+  timeframe: 'weekly'
 }
 ```
 
@@ -167,12 +196,6 @@ DELETE /recommendations/listing/:id
 
 Deletes the record with the `id` in the endpoint.
 
-#### Example input
-```
-{
-  id: 1
-}
-```
 
 #### Response
 `Status: 200 OK`

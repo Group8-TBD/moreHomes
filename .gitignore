@@ -29,5 +29,5 @@ dist/
 
 public/bundle.js
 database/generated-data/
-k6.js
+k6/
 newrelic.js
