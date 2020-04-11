@@ -1,53 +1,25 @@
 const Models = require('../database/models/models.js');
 const faker = require('faker');
 
-const munge = async (listing) => {
-  try {
-    let images = await Models.getImgs([listing.id]);
-    let imageUrls = images.rows.map(imageId => `https://olympuscomponent.s3-us-west-1.amazonaws.com/${imageId.image_url_id}.jpg`);
-    let responseObj = {
-      "space": {
-        "occupancy": listing.occupancy,
-        "type": listing.type,
-        "bedCount": listing.bed_count
-      },
-      "rate": {
-        "price": listing.price,
-        "timeframe": listing.timeframe
-      },
-      "review": {
-        "stars": listing.avg_rtg,
-        "reviewers": listing.num_reviews
-      },
-      "images": imageUrls,
-      "_id": listing.id,
-      'title': '',
-      "description": listing.description
-    };
-
-    return responseObj;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-const getRecs = async (req, res) => {
-  try {
-    const params = [req.params.zip];
-    let data = [];
-    let allRecs = await Models.getRecs(params);
-
-    for (let i = 0; i < allRecs.rows.length; i += 1) {
-      let listObj = await munge(allRecs.rows[i]);
-      data.push(listObj);
+const getRecs = (req, res) => {
+  Models.getRecs([req.params.zip], (err, allRecs) => {
+    if (err) {
+      console.log('Error getting listing info', err);
+    } else {
+      res.status(200).send(allRecs.rows);
     }
-
-    res.status(200).send(data);
-
-  } catch (error) {
-    console.log('Error getting recommendations', error);
-  }
+  });
 };
+
+const getImgs = (req, res) => {
+  Models.getImgs([req.params.id], (err, allImgs) => {
+    if (err) {
+      console.log('Error getting image info', err);
+    } else {
+      res.status(200).send(allImgs.rows);
+    }
+  });
+}
 
 const addListing = (req, res) => {
   const uuid = faker.random.uuid();
@@ -89,6 +61,7 @@ const deleteListing = (req, res) => {
 
 module.exports = {
   getRecs,
+  getImgs,
   addListing,
   updateListing,
   deleteListing

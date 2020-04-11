@@ -1,23 +1,13 @@
 const db = require('../database.js');
 
-const getRecs = async (zip) => {
-  try {
-    const queryStr = `SELECT id, occupancy, type, bed_count, price, timeframe, avg_rtg, num_reviews, description from listings where zip=$1 LIMIT 8`;
-    let result = await db.query(queryStr, zip);
-    return result;
-  } catch (error) {
-    console.log(error);
-  }
+const getRecs = (zip, callback) => {
+  const queryStr = `SELECT id, occupancy, type, bed_count, price, timeframe, avg_rtg, num_reviews, description from listings where zip=$1 LIMIT 8`;
+  db.query(queryStr, zip, callback);
 };
 
-const getImgs = async (listing) => {
-  try {
-    const queryStr = `SELECT image_url_id FROM images WHERE listing=$1`;
-    let result = await db.query(queryStr, listing);
-    return result;
-  } catch (error) {
-    console.log(error);
-  }
+const getImgs = (listingId, callback) => {
+  const queryStr = `SELECT image_url_id FROM images WHERE listing=$1`
+  db.query(queryStr, listingId, callback);
 };
 
 const addListing = (params, callback) => {

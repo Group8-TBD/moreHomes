@@ -11,6 +11,7 @@ const port = 3000;
 app.use(express.static(path.join(__dirname, '/../public')));
 
 app.get('/recommendations/:zip', Controller.getRecs);
+app.get('/images/listing/:id', Controller.getImgs);
 app.post('/recommendations', Controller.addListing);
 app.patch('/recommendations/listing/:id', Controller.updateListing);
 app.delete('/recommendations/listing/:id', Controller.deleteListing);
