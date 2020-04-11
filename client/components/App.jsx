@@ -48,30 +48,26 @@ class App extends React.Component {
     axios.get(`/recommendations/${zip}`)
       .then((results) => {
         let homeList = munge(results.data);
-        this.setState({ homes: homeList });
 
-        const newHomeList = [];
         // get images associated with listings
-        homeList.forEach((home) => {
-          axios.get(`/images/listing/${home._id}`)
+        let promises = homeList.map((home) => {
+          return axios.get(`/images/listing/${home._id}`)
             .then((allImages) => {
               let imageUrls = allImages.data.map(urlId =>
                 `https://olympuscomponent.s3-us-west-1.amazonaws.com/${urlId.image_url_id}.jpg`
               );
-              let newState = {};
-              Object.assign(newState, home);
-              newState.images = imageUrls;
 
-              newHomeList.push(newState);
-            });
+              home.images = imageUrls;
+
+              return home;
+            })
         });
 
-        return newHomeList;
-      })
-      .then((newState) => {
-        this.setState({ homes: newState }, () => {
-          console.log(this.state);
-        })
+        Promise.all(promises).then((newHomeList) => {
+          this.setState({ homes: newHomeList }, () => {
+            console.log('current state: ', this.state);
+          });
+        });
       })
       .catch((err) => {
         console.log('something went awry');
