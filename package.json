@@ -27,7 +27,7 @@
     "cli-progress": "^3.6.1",
     "csv-writer": "^1.6.0",
     "express": "^4.17.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "mongodb": "^3.5.5",
     "mongoose": "^5.9.4",
     "newrelic": "^6.5.0",
